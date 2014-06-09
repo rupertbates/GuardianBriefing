@@ -40,6 +40,15 @@ class AlertAdapter extends ArrayAdapter<AlertTime> {
                 timePickerDialog.show(mainActivity.getSupportFragmentManager(), FRAG_TAG_TIME_PICKER);
             }
         });
+        convertView.findViewById(R.id.delete_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(MainActivity.LOG_TAG, "Removing alert at " + alertTime.toString());
+                alertTimes.remove(alertTime);
+                mainActivity.onAlertCancelled(alertTime);
+                notifyDataSetChanged();
+            }
+        });
         return convertView;
     }
 
@@ -52,7 +61,9 @@ class AlertAdapter extends ArrayAdapter<AlertTime> {
         @Override
         public void onTimeSet(RadialPickerLayout radialPickerLayout, int hour, int minute) {
             Log.i(MainActivity.LOG_TAG, "Time set to " + hour + ":" + minute);
+            mainActivity.onAlertCancelled(time);
             time.setTime(hour + ":" + minute);
+            mainActivity.onAlertTimeChanged(alertTimes);
             notifyDataSetChanged();
         }
     }

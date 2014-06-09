@@ -1,10 +1,6 @@
 package com.guardian.briefing.app;
 
 import android.util.Log;
-
-import com.doomonafireball.betterpickers.radialtimepicker.RadialPickerLayout;
-import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -12,17 +8,19 @@ import java.util.Date;
 
 class AlertTime {
     Date time;
+    private SimpleDateFormat storageFormat;
 
     public AlertTime(String alertTime) {
+        storageFormat = new SimpleDateFormat("HH:mm");
         time = getNextDownloadTime(alertTime);
     }
 
     private Date getNextDownloadTime(String timeString) {
         //get the time set in preferences
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+
         Date time = null;
         try {
-            time = format.parse(timeString);
+            time = storageFormat.parse(timeString);
         } catch (ParseException e) {
             Log.e(MainActivity.LOG_TAG, "error parsing scheduled download time", e);
         }
@@ -48,11 +46,19 @@ class AlertTime {
         return new SimpleDateFormat("h:mm a").format(time);
     }
 
+    public String toValue(){
+        return storageFormat.format(time);
+    }
+
     public int getHour() {
         return time.getHours();
     }
 
     public int getMinute() {
         return time.getMinutes();
+    }
+
+    public long getTime() {
+        return time.getTime();
     }
 }
